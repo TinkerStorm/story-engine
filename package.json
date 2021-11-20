@@ -1,0 +1,28 @@
+{
+  "name": "discord-story-engine",
+  "version": "1.0.0",
+  "description": "A service to assist in the creation of interactive stories inside of Discord.",
+  "main": "dist/app.js",
+  "repository": "https://github.com/TinkerStorm/story-engine.git",
+  "author": "Junior <sudojunior@outlook.com>",
+  "license": "GPL-3.0",
+  "private": true,
+  "scripts": {
+    "start": "node dist/app.js",
+    "build": "npm run clean && tsc && npm run start",
+    "clean": "rm -rf dist",
+    "test": "xo && ava"
+  },
+  "dependencies": {
+    "color": "^4.0.1",
+    "eris": "^0.16.1",
+    "js-yaml": "^4.1.0",
+    "slash-create": "^4.3.1"
+  },
+  "devDependencies": {
+    "@types/js-yaml": "^4.0.5",
+    "@types/node": "^16.11.9",
+    "ava": "^3.15.0",
+    "xo": "^0.46.4"
+  }
+}

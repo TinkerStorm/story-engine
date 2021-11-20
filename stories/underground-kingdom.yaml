@@ -1,0 +1,127 @@
+title: Underground Kingdom
+author: Edward Packard
+description: |
+  **SYSTEM DEMO**
+
+  :warning: **WARNING**
+  The Underground Kingdom is not easy to reach. Many readers never get there. Others never return.
+  https://mudarwan.files.wordpress.com/2010/08/choose-your-own-adventure-018-underground-kingdom-edward-packard.pdf
+start_with: page-1
+
+steps:
+  page-1:
+    payload: |
+      You are standing on the Toan Glacier in northern Greenland, staring down into the black void of the crevasse. You shiver as you wonder whether you were lucky or unlucky to be invited on this expedition.
+      Standing next to you are Gunnar Larsen of the National Research Institute and Dr. James Sneed, a geologist. A small black box containing a signal transmitter is suspended over the crevasse by two long poles. The transmitter is wired to a console a few yards away in the ice. Dr. Sneed turns a dial as he monitors the display screen.
+      "Well?" Larsen's voice is impatient.
+      Sneed looks up, a broad smile on his face. "This is it, friends—the Bottomless Crevasse."
+      "Any radar return?" Larsen asks.
+      Sneed shakes his head. "None."
+      For a minute no one speaks. Like you, the others must feel excited to have reached their goal but also a little sad. It was just a year ago that your old friend, Dr. Nera Vivaldi, radioed from this spot that she had reached the Bottomless Crevasse. A few moments later, her radio went dead. She was never seen again.
+    routing:
+      next: page-2
+  page-2:
+    payload: |
+      Now you stand at the edge, lost in thought How could the crevasse have no bottom? Could it really lead to an underground kingdom? What happened to Dr. Vivaldi?
+      But your thoughts are shattered. You didn't seem to slip, yet suddenly you are falling into the crevasse! A ledge is coming up fast beneath you. You could land on it, but you're falling so fast you're sure to be badly injured. You might only be saving yourself for a slow, agonizing death.
+      These thoughts race through your head in a split second.
+    components:
+      - type: 1
+        components:
+          - type: 2
+            style: 4
+            label: Try to land on the ledge.
+            custom_id: risk
+          - type: 2
+            style: 2
+            label: Continue
+            custom_id: next
+    routing:
+      risk: page-5
+      next: page-3
+  page-3:
+    payload: |
+      Your consciousness slips away as you fall faster down, down, down.
+      The next thing you know, you're floating in air. In the soft, reddish light you can see that you are in a cavern, drifting toward the ceiling—or is it the floor? In a flash you realize what has happened— *you've fallen to a point where gravity above you is almost equal to gravity beneath you!*
+      You brush against a firm surface—a wall that feels like clay. You cling to it for a moment. Then you're floating again, drifting slowly down. You begin to lose your fear as you realize that gravity here is so weak that you can fall mile after mile without being hurt After a while you begin to relax and enjoy drifting through a fantastic twilight world. You only wish it weren't so hot! Closing your eyes, you try to pretend that you are safely home in bed.
+    routing:
+      next: page-6
+  page-5:
+    payload: |
+      Your whole body is racked with pain as you crash onto the ledge. You're shaken and bruised but still alive! A snowbank cushioned your fall.
+      "HELP!" you cry.
+      "Hold on!" Larsen yells. "It's going to be tricky, but we're rigging our ropes. We'll get you up."
+      You feel a flash of joy; then you remember something that chills you to the bone. You were very careful not to fall in. You're quite sure you didn't slip; you were pulled as if by an unknown force within the Bottomless Crevasse.
+      Should you warn your friends about the strange force? If you do, they may be afraid to get close enough to rescue you.
+    components:
+      - type: 1
+        components:
+          - type: 2
+            style: 4
+            label: Warn them
+            custom_id: warn
+          - type: 2
+            style: 2
+            label: '"Please Hurry"'
+            custom_id: hurry
+    routing:
+      warn: page-13
+      hurry: page-9
+    
+  page-6:
+    payload:
+      Once again you brush against a firm surface. This time it's the floor of the cavern. In fact, you have touched down on the mossy bank of an underground stream. You drink from the cool, clear water, then step out of the cavern into this strange world.
+      The only illumination is a dim red-orange glow that seems to come from the ground. The air is so clear that you can see shadowy, curving hills and valleys stretching out in all directions, even above you.
+      Why do you feel so good? It must be because you are so light—you could hardly weigh more than ten or fifteen pounds. You spring to your feet Every movement is easy.  You jump—twenty or thirty feet high—and float gently to the ground.
+      Then you realize that you are not alone. Only a few yards away is an odd creature. As big as you are, it seems to be some kind of bird yet much more than a bird. Under a crown of soft golden feathers are enormous blue-green eyes, so vivid and intense that they seem to be not only a means of vision, but also a means of power.
+      There is something terrifying about that face, but also something angelic, something that draws you to it In fact, you feel as if you are being hypnotized by those   eyes—eyes of an angel bird!
+    components:
+      - type: 1
+        components:
+          - type: 2
+            style: 1
+            label: Run
+            custom_id: run
+          - type: 2
+            style: 4
+            label: Hold your ground.
+            custom_id: face
+    routing:
+      run:
+        - [page-15, 0.4]
+        - [page-9, 0.6]
+      face: page-10
+  page-9:
+    payload: |
+      **page-9**
+      You run as fast as you can, hoping that once the mother sees her baby is safe, she will not pursue you.
+      You dart into a cavern. It's darker and hotter than the pleasant spot where you found the fledgling. Is it the same passageway you came through?
+      Still running, you look back over your shoulder to see if the mother bird is following. At that moment you find yourself falling, or rather rising, toward the earth's surface—drawn up into what must be the same shaft that forms the Bottomless Crevasse!
+      Soon you stop rising and start falling. Then you rise a shorter distance, stop, and begin to fall again. You feel like a yo-yo, bouncing up and down, up and down, until you finally come to rest at the center of gravity, the point where you will neither rise nor fall. Like a cork thrown in the ocean, you seem doomed to drift forever.
+    routing: end
+  page-10:
+    payload:
+      content: |
+        *Demo end*
+    routing: end
+  page-13:
+    payload:
+      content: |
+        *Demo end*
+    routing: end
+  page-15:
+    payload:
+      content: |
+        *Demo end*
+    routing: end
+#  page-?:
+#    payload:
+#      content: |
+#        
+#      components:
+#        - type: 1
+#          components:
+#            - type: 2
+#    routing:
+#      run: page-15
+#      face: page-10
