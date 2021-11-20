@@ -63,6 +63,8 @@ routing:
 
 ### Structure (Steps - `steps.*`)
 
+| Field | Type | Description |
+| ----- | ---- | ----------- |
 | `{step_name}` | `object` | A step in the story |
 | `{step_name}.payload` | `string` or `object` | A [discord message payload](https://discord.com/developers/docs/resources/channel#message-object) to be sent back to the user, *if a string it will be resolved as an embed*. |
 | `{step_name}.components` | `array` | *If payload is `string`*, a list of components to be rendered in the message |
