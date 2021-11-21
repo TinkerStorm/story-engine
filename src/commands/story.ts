@@ -100,25 +100,23 @@ export default class StoryCommand extends SlashCommand {
         if (typeof destinations === 'string') {
           // single destination
           destination = destinations;
+        } else if (Array.isArray(destinations)) {
+          // random destination
+          destination = destinations[Math.floor(Math.random() * destinations.length)];
         } else {
+          // map of destinations
           // determine if weighted chance
-          const value = destinations[0] as string | [string, number];
-          if (typeof value[1] !== 'string') {
-            const weights = (destinations as unknown as [string, number][])
-              .map(([, weight]) => weight);
-            const total = weights.reduce((a, b) => a + b, 0);
-            const random = Math.random() * total;
-            let current = 0;
-            for (const [dest, weight] of destinations as unknown as [string, number][]) {
-              current += weight;
-              if (current >= random) {
-                destination = dest;
-                break;
-              }
+          const weights = Object.values(destinations);
+          const total = weights.reduce((a, b) => a + b, 0);
+          const random = Math.random() * total;
+          let current = 0;
+          for (const dest in destinations) {
+            const weight = destinations[dest];
+            current += weight;
+            if (current >= random) {
+              destination = dest;
+              break;
             }
-          } else {
-            destination = (destinations as string[])
-            [Math.floor(Math.random() * destinations.length)];
           }
         }
 

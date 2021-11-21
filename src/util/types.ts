@@ -11,8 +11,8 @@ export interface Story {
 export interface StoryStep {
   payload: MessageOptions | string;
   components?: ComponentActionRow[];
-  routing: "end"/*| string*/ | { 
-    [route: string]: Many<string> | [string, number];
+  routing: "end"/*| string*/ | {
+    [route: string]: Many<string> | { [route: string]: number }
   };
 }
 
