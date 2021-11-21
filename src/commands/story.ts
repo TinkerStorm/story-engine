@@ -173,8 +173,6 @@ export default class StoryCommand extends SlashCommand {
     if (story.steps[stepID].routing === 'end')
       payload.components = [];
 
-    console.log(payload.components, stepID);
-
     return payload;
   }
-  }
+}

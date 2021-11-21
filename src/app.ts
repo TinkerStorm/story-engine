@@ -12,11 +12,6 @@ const creator = new SlashCreator({
   token: env.TOKEN,
 });
 
-creator.on('componentInteraction', (ctx) => {
-  console.log(`found component interaction: ${ctx.message.id}-${ctx.customID} for ${ctx.user.id}`);
-  console.log(creator._componentCallbacks);
-});
-
 creator
   .withServer(
     new GatewayServer(
