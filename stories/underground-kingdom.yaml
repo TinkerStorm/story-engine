@@ -69,7 +69,7 @@ steps:
       hurry: page-9
     
   page-6:
-    payload:
+    payload: |
       Once again you brush against a firm surface. This time it's the floor of the cavern. In fact, you have touched down on the mossy bank of an underground stream. You drink from the cool, clear water, then step out of the cavern into this strange world.
       The only illumination is a dim red-orange glow that seems to come from the ground. The air is so clear that you can see shadowy, curving hills and valleys stretching out in all directions, even above you.
       Why do you feel so good? It must be because you are so light—you could hardly weigh more than ten or fifteen pounds. You spring to your feet Every movement is easy.  You jump—twenty or thirty feet high—and float gently to the ground.
@@ -88,8 +88,8 @@ steps:
             custom_id: face
     routing:
       run:
-        - [page-15, 0.4]
-        - [page-9, 0.6]
+        page-15: 0.4
+        page-9: 0.6
       face: page-10
   page-9:
     payload: |
