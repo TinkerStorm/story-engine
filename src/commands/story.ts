@@ -49,7 +49,7 @@ export default class StoryCommand extends SlashCommand {
     // load story from file system
     const story = yaml.load((await readFile('./stories/underground-kingdom.yaml')).toString()) as Story;
 
-    // get first step
+    // TODO:remove - this is a 'bodge' to get metadata to show in the first message
     let step = story.steps[story.start_with];
 
     const meta = `${story.title} (by ${story.author})\n${story.description}\n\n`;
@@ -57,10 +57,13 @@ export default class StoryCommand extends SlashCommand {
     step.payload = this.resolvePayload(step.payload, story, story.start_with);
     step.payload.content = meta;
     story.steps[story.start_with] = step;
+    // TODO:end
 
     return await this.storyProgress(story, story.start_with, ctx);
   }
 
+  // TODO: move to service, allow resolution of story from ref outside of command
+  // additionally, allows progression towards starting a story from pre-posted 'promo' message
   async storyProgress(story: Story, stepID: string, ctx: CommandContext | ComponentContext) {
     const step = story.steps[stepID];
 
