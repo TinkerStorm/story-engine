@@ -3,13 +3,15 @@ import { MessageOptions, CommandContext, CommandOptionType, ComponentContext, Sl
 import yaml from "js-yaml";
 
 import { Story } from "../util/types";
-import { hashCode } from "../util/common";
+import { getDestination, hashCode } from "../util/common";
+import ComponentWildcard from "../util/ComponentWildcard";
 
 // import StoryService from "../services/story";
 
 const REGEX = /[^A-Za-z0-9]+/g;
 
 export default class StoryCommand extends SlashCommand {
+  wildcards: ComponentWildcard;
   // private service: StoryService;
 
   constructor(creator: SlashCreator) {
@@ -29,6 +31,7 @@ export default class StoryCommand extends SlashCommand {
         // disabled for now
       ]
     })
+    this.wildcards = new ComponentWildcard(this.creator);
 
     // this.service = new StoryService("./stories");
   }
@@ -89,43 +92,44 @@ export default class StoryCommand extends SlashCommand {
     const routeMap = step.routing;
     const routeKeys = Object.keys(routeMap);
 
-    for (const route of routeKeys) {
-      const destinations = routeMap[route];
-      ctx.registerComponentFrom(id, route, async (ctx) => {
-        console.log(`${route} triggered, ${ctx.customID}`);
-
-        // remove all component listeners
-        for (const route of routeKeys) {
-          ctx.unregisterComponent(route, id);
-        }
-
-        let destination: string;
-        if (typeof destinations === 'string') {
-          // single destination
-          destination = destinations;
-        } else if (Array.isArray(destinations)) {
-          // random destination
-          destination = destinations[Math.floor(Math.random() * destinations.length)];
-        } else {
-          // map of destinations
-          // determine if weighted chance
-          const weights = Object.values(destinations);
-          const total = weights.reduce((a, b) => a + b, 0);
-          const random = Math.random() * total;
-          let current = 0;
-          for (const dest in destinations) {
-            const weight = destinations[dest];
-            current += weight;
-            if (current >= random) {
-              destination = dest;
-              break;
-            }
+    this.wildcards.register(id, routeKeys, async (ctx, key) => {
+      const destinations = routeMap[key];
+      let destination: string | undefined = undefined;
+      if (typeof destinations === 'string') {
+        // single destination
+        destination = destinations;
+      } else if (Array.isArray(destinations)) {
+        // random destination
+        destination = destinations[Math.floor(Math.random() * destinations.length)];
+      } else {
+        // map of destinations
+        // determine if weighted chance
+        const weights = Object.values(destinations);
+        const total = weights.reduce((a, b) => a + b, 0);
+        const random = Math.random() * total;
+        let current = 0;
+        for (const dest in destinations) {
+          const weight = destinations[dest];
+          current += weight;
+          if (current >= random) {
+            destination = dest;
+            break;
           }
         }
+      }
 
-        return this.storyProgress(story, destination!, ctx);
-      });
-    }
+      if (typeof destination === 'undefined') {
+        console.error(`[${new Date().toISOString()}]`, `No destination found for route '${key}' on step '${stepID}'`);
+        await ctx.editOriginal({
+          content: `No destination found for '${key}', ending story.`,
+          components: []
+        });
+        return;
+      }
+
+
+      return this.storyProgress(story, destination, ctx);
+    });
   }
 
   resolvePayload(payload: string | MessageOptions, story: Story, stepID: string): MessageOptions {
