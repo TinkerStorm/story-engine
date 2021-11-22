@@ -93,30 +93,7 @@ export default class StoryCommand extends SlashCommand {
     const routeKeys = Object.keys(routeMap);
 
     this.wildcards.register(id, routeKeys, async (ctx, key) => {
-      const destinations = routeMap[key];
-      let destination: string | undefined = undefined;
-      if (typeof destinations === 'string') {
-        // single destination
-        destination = destinations;
-      } else if (Array.isArray(destinations)) {
-        // random destination
-        destination = destinations[Math.floor(Math.random() * destinations.length)];
-      } else {
-        // map of destinations
-        // determine if weighted chance
-        const weights = Object.values(destinations);
-        const total = weights.reduce((a, b) => a + b, 0);
-        const random = Math.random() * total;
-        let current = 0;
-        for (const dest in destinations) {
-          const weight = destinations[dest];
-          current += weight;
-          if (current >= random) {
-            destination = dest;
-            break;
-          }
-        }
-      }
+      const destination = getDestination(routeMap[key]);
 
       if (typeof destination === 'undefined') {
         console.error(`[${new Date().toISOString()}]`, `No destination found for route '${key}' on step '${stepID}'`);
