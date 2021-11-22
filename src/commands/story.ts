@@ -1,5 +1,9 @@
 import { readFile } from "fs/promises";
-import { MessageOptions, CommandContext, CommandOptionType, ComponentContext, SlashCommand, SlashCreator, ComponentType, ButtonStyle, Message, ComponentActionRow, AutocompleteChoice, AutocompleteContext } from "slash-create";
+import {
+  CommandOptionType, AnyComponentButton, ComponentType, ButtonStyle, Message,
+  SlashCommand, SlashCreator, MessageOptions, CommandContext, ComponentContext,
+  AutocompleteChoice, AutocompleteContext
+} from "slash-create";
 import yaml from "js-yaml";
 
 import { Story } from "../util/types";
@@ -81,6 +85,7 @@ export default class StoryCommand extends SlashCommand {
 
     const method = ctx.initiallyResponded ? 'send' : 'editOriginal';
     const msg = await ctx[method](payload);
+    const id = msg instanceof Message ? msg.id : ctx.interactionID;
 
     if (typeof step.routing === 'string') {
       if (step.routing === 'end') {
@@ -90,11 +95,50 @@ export default class StoryCommand extends SlashCommand {
           `has reached the end of`,
           `${story.title} (${story.author}) on step '${stepID}'.`
         );
+
+        const components: AnyComponentButton[] = [
+          {
+            type: ComponentType.BUTTON,
+            custom_id: 'credits',
+            label: 'Credits',
+            style: ButtonStyle.SUCCESS
+          },
+          {
+            type: ComponentType.BUTTON,
+            style: ButtonStyle.LINK,
+            label: 'Source',
+            url: 'https://github.com/TinkerStorm/story-engine/blob/main/stories/underground-kingdom-1.yaml',
+          }
+        ]
+
+        ctx.editOriginal({
+          ...payload,
+          components: [{
+            type: ComponentType.ACTION_ROW,
+            components
+          }]
+        });
+
+        ctx.registerComponentFrom(id, "credits", (ctx) => {
+          ctx.unregisterComponent("credits", id);
+          ctx.editOriginal({
+            content: `${story.title} (by ${story.author})\n\n${story.description}`,
+            components: [{
+              type: ComponentType.ACTION_ROW,
+              components: [{
+                type: ComponentType.BUTTON,
+                style: ButtonStyle.LINK,
+                label: 'Source',
+                url: 'https://github.com/TinkerStorm/story-engine/blob/main/stories/underground-kingdom-1.yaml',
+              }]
+            }]
+          });
+        });
+
         return; // end of story route
       }
     }
 
-    const id = msg instanceof Message ? msg.id : ctx.interactionID;
 
     const routeMap = step.routing;
     const routeKeys = Object.keys(routeMap);
