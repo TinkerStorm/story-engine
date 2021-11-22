@@ -1,10 +1,12 @@
 import { readFile } from "fs/promises";
-import { MessageOptions, CommandContext, CommandOptionType, ComponentContext, SlashCommand, SlashCreator, ComponentType, ButtonStyle, Message, ComponentActionRow } from "slash-create";
+import { MessageOptions, CommandContext, CommandOptionType, ComponentContext, SlashCommand, SlashCreator, ComponentType, ButtonStyle, Message, ComponentActionRow, AutocompleteChoice, AutocompleteContext } from "slash-create";
 import yaml from "js-yaml";
 
 import { Story } from "../util/types";
 import { getDestination, hashCode } from "../util/common";
 import ComponentWildcard from "../util/ComponentWildcard";
+
+import stories from '../manifest';
 
 // import StoryService from "../services/story";
 
@@ -21,13 +23,13 @@ export default class StoryCommand extends SlashCommand {
       deferEphemeral: true,
       guildIDs: ["684013196700418048"],
       options: [
-        //{
-        //  name: 'ref',
-        //  type: CommandOptionType.STRING,
-        //  description: 'The reference to the story.',
-        //  autocomplete: true,
-        //  required: true
-        //}
+        {
+          name: 'ref',
+          type: CommandOptionType.STRING,
+          description: 'The reference to the story.',
+          autocomplete: true,
+          required: true
+        }
         // disabled for now
       ]
     })
@@ -36,21 +38,26 @@ export default class StoryCommand extends SlashCommand {
     // this.service = new StoryService("./stories");
   }
 
-  //async autocomplete(ctx: AutocompleteContext): Promise<AutocompleteChoice[]> {
-  //  // fetch all stories
-  //  const stories = await this.service.getStoryList();
-  //  const option = ctx.options[ctx.focused];
+  async autocomplete(ctx: AutocompleteContext): Promise<AutocompleteChoice[]> {
+    // fetch all stories
+    // const stories = await this.service.getStoryList();
+    const option = ctx.options[ctx.focused];
 
-  //  return stories.filter((story) => {
-  //    // search by title and by author
-  //    return story.name.toLowerCase().includes(option.toLowerCase())
-  //  });
-  //}
+    return stories.filter((story) => {
+      // search by title and by author
+      return story.title.toLowerCase().includes(option.toLowerCase())
+    }).map((story) => {
+      return {
+        name: story.title + ' (' + story.author + ')',
+        value: story.ref
+      }
+    });
+  }
 
   async run(ctx: CommandContext) {
     await ctx.defer(true);
     // load story from file system
-    const story = yaml.load((await readFile('./stories/underground-kingdom.yaml')).toString()) as Story;
+    const story = yaml.load((await readFile(`./stories/${ctx.options.ref}.yaml`)).toString()) as Story;
 
     // TODO:remove - this is a 'bodge' to get metadata to show in the first message
     let step = story.steps[story.start_with];
