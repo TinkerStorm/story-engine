@@ -63,16 +63,6 @@ export default class StoryCommand extends SlashCommand {
     // load story from file system
     const story = yaml.load((await readFile(`./stories/${ctx.options.ref}.yaml`)).toString()) as Story;
 
-    // TODO:remove - this is a 'bodge' to get metadata to show in the first message
-    let step = story.steps[story.start_with];
-
-    const meta = `${story.title} (by ${story.author})\n${story.description}\n\n`;
-
-    step.payload = this.resolvePayload(step.payload, story, story.start_with);
-    step.payload.content = meta;
-    story.steps[story.start_with] = step;
-    // TODO:end
-
     return await this.storyProgress(story, story.start_with, ctx);
   }
 
