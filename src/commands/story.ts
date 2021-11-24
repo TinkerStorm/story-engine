@@ -76,6 +76,7 @@ export default class StoryCommand extends SlashCommand {
     const method = ctx.initiallyResponded ? 'send' : 'editOriginal';
     const msg = await ctx[method](payload);
     const id = msg instanceof Message ? msg.id : ctx.interactionID;
+    console.log(stepID, 'Is interaction the source?', (msg as Message).id, ctx.interactionID);
 
     if (typeof step.routing === 'string') {
       if (step.routing === 'end') {
@@ -86,26 +87,18 @@ export default class StoryCommand extends SlashCommand {
           `${story.title} (${story.author}) on step '${stepID}'.`
         );
 
-        const components: AnyComponentButton[] = [
-          {
-            type: ComponentType.BUTTON,
-            custom_id: 'credits',
-            label: 'Credits',
-            style: ButtonStyle.SUCCESS
-          },
-          {
-            type: ComponentType.BUTTON,
-            style: ButtonStyle.LINK,
-            label: 'Source',
-            url: 'https://github.com/TinkerStorm/story-engine/blob/main/stories/underground-kingdom-1.yaml',
-          }
-        ]
-
         ctx.editOriginal({
+          content: '',
+          embeds: [],
           ...payload,
           components: [{
             type: ComponentType.ACTION_ROW,
-            components
+            components: [{
+              type: ComponentType.BUTTON,
+              custom_id: 'credits',
+              label: 'Credits',
+              style: ButtonStyle.SUCCESS
+            }]
           }]
         });
 
@@ -113,6 +106,7 @@ export default class StoryCommand extends SlashCommand {
           ctx.unregisterComponent("credits", id);
           ctx.editOriginal({
             content: `${story.title} (by ${story.author})\n\n${story.description}`,
+            embeds: [],
             components: [{
               type: ComponentType.ACTION_ROW,
               components: [{
@@ -129,7 +123,6 @@ export default class StoryCommand extends SlashCommand {
       }
     }
 
-
     const routeMap = step.routing;
     const routeKeys = Object.keys(routeMap);
 
@@ -144,7 +137,6 @@ export default class StoryCommand extends SlashCommand {
         });
         return;
       }
-
 
       return this.storyProgress(story, destination, ctx);
     });
