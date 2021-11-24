@@ -11,7 +11,7 @@
         {% for item in site.data.nav %}
           <li class="nav-item" {% if item.children %}{% endif %}>
             {% if item.href %}
-              <a href="{{ item.href }}" class="nav-link{% if item.href == page.url %} active{% endif %}">
+              <a href="{{ item.href | absolute_url }}" class="nav-link{% if item.href == page.url %} active{% endif %}">
                 {{ item.label }}
               </a>
             {% else %}
@@ -28,7 +28,7 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{{ site.github_url }}">
+          <a class="nav-link" href="{{ site.github.repostory_url }}">
             <span class="bi bi-github"></span>
           </a>
         </li>
