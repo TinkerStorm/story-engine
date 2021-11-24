@@ -3,3 +3,6 @@ node_modules
 .env
 
 dist
+
+.jekyll-cache
+_site
