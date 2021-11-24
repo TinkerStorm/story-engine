@@ -1,0 +1,22 @@
+title: Story Engine
+description: A discord interactions service that provides a platform for interactive stories written by the community.
+image: /assets/images/avatar.png
+
+discord_url: https://discord.gg/Bb3JQQG
+github_url: https://github.com/TinkerStorm/story-engine
+
+collections:
+  guides:
+    output:
+      permalink: /:title/
+    sort: date
+
+defaults:
+  - scope:
+      path: ./guides/
+    values:
+      layout: guide
+  - scope:
+      path: .
+    values:
+      layout: default

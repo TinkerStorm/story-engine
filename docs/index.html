@@ -1,0 +1,39 @@
+---
+layout: default
+actions:
+  - type: primary
+    href: https://discord.com/api/oauth2/authorize?client_id=911374649357660210&permissions=0&scope=applications.commands
+    text: Invite the bot
+    icon: discord
+
+  - type: secondary
+    href: ./guides/write-a-story
+    text: Write a story
+    icon: pen
+
+  - type: danger
+    href: https://github.com/RocketDragon/story-bucket-template
+    text: Host a bucket
+    icon: github
+---
+
+<div class="px-4 py-5 my-3 text-center">
+  <img class="d-block mx-auto mb-4" src="{{ site.baseurl }}{{ site.image }}" alt="" width="100">
+  <h1 class="display-5 fw-bold">{{ site.title }}</h1>
+  <div class="col-lg-6 mx-auto">
+    <p class="lead mb-4">{{ site.description }}</p>
+    <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+      {% for action in page.actions %}
+        <a href="{{ action.href | absolute_url }}" class="btn btn-{{ action.type }} btn-lg gap-3">
+          <span class="bi bi-{{ action.icon }}"></span>
+          <span class="p-1">{{ action.text }}</span>
+        </a>
+      {% endfor %}
+    </div>
+  </div>
+
+  <figure class="figure my-5">
+    <img src="{{ site.baseurl }}/assets/images/static-demo.png" class="figure-img img-fluid rounded" alt="...">
+    <figcaption class="figure-caption text-end">A story being run as an ephemeral message.</figcaption>
+  </figure>
+</div>

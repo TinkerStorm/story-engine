@@ -1,5 +1,9 @@
 import { readFile } from "fs/promises";
-import { MessageOptions, CommandContext, CommandOptionType, ComponentContext, SlashCommand, SlashCreator, ComponentType, ButtonStyle, Message, ComponentActionRow, AutocompleteChoice, AutocompleteContext } from "slash-create";
+import {
+  CommandOptionType, AnyComponentButton, ComponentType, ButtonStyle, Message,
+  SlashCommand, SlashCreator, MessageOptions, CommandContext, ComponentContext,
+  AutocompleteChoice, AutocompleteContext
+} from "slash-create";
 import yaml from "js-yaml";
 
 import { Story } from "../util/types";
@@ -59,16 +63,6 @@ export default class StoryCommand extends SlashCommand {
     // load story from file system
     const story = yaml.load((await readFile(`./stories/${ctx.options.ref}.yaml`)).toString()) as Story;
 
-    // TODO:remove - this is a 'bodge' to get metadata to show in the first message
-    let step = story.steps[story.start_with];
-
-    const meta = `${story.title} (by ${story.author})\n${story.description}\n\n`;
-
-    step.payload = this.resolvePayload(step.payload, story, story.start_with);
-    step.payload.content = meta;
-    story.steps[story.start_with] = step;
-    // TODO:end
-
     return await this.storyProgress(story, story.start_with, ctx);
   }
 
@@ -81,6 +75,8 @@ export default class StoryCommand extends SlashCommand {
 
     const method = ctx.initiallyResponded ? 'send' : 'editOriginal';
     const msg = await ctx[method](payload);
+    const id = msg instanceof Message ? msg.id : ctx.interactionID;
+    console.log(stepID, 'Is interaction the source?', (msg as Message).id, ctx.interactionID);
 
     if (typeof step.routing === 'string') {
       if (step.routing === 'end') {
@@ -90,11 +86,42 @@ export default class StoryCommand extends SlashCommand {
           `has reached the end of`,
           `${story.title} (${story.author}) on step '${stepID}'.`
         );
+
+        ctx.editOriginal({
+          content: '',
+          embeds: [],
+          ...payload,
+          components: [{
+            type: ComponentType.ACTION_ROW,
+            components: [{
+              type: ComponentType.BUTTON,
+              custom_id: 'credits',
+              label: 'Credits',
+              style: ButtonStyle.SUCCESS
+            }]
+          }]
+        });
+
+        ctx.registerComponentFrom(id, "credits", (ctx) => {
+          ctx.unregisterComponent("credits", id);
+          ctx.editOriginal({
+            content: `${story.title} (by ${story.author})\n\n${story.description}`,
+            embeds: [],
+            components: [{
+              type: ComponentType.ACTION_ROW,
+              components: [{
+                type: ComponentType.BUTTON,
+                style: ButtonStyle.LINK,
+                label: 'Source',
+                url: 'https://github.com/TinkerStorm/story-engine/blob/main/stories/underground-kingdom-1.yaml',
+              }]
+            }]
+          });
+        });
+
         return; // end of story route
       }
     }
-
-    const id = msg instanceof Message ? msg.id : ctx.interactionID;
 
     const routeMap = step.routing;
     const routeKeys = Object.keys(routeMap);
@@ -110,7 +137,6 @@ export default class StoryCommand extends SlashCommand {
         });
         return;
       }
-
 
       return this.storyProgress(story, destination, ctx);
     });

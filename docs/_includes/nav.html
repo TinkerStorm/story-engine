@@ -1,0 +1,38 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container">
+    <a class="navbar-brand mb-0 h1" href="#">
+      {{ site.title }}
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        {% for item in site.data.nav %}
+          <li class="nav-item" {% if item.children %}{% endif %}>
+            {% if item.href %}
+              <a href="{{ item.href }}" class="nav-link{% if item.href == page.url %} active{% endif %}">
+                {{ item.label }}
+              </a>
+            {% else %}
+              {{ item.label }}
+            {% endif %}
+          </li>
+        {% endfor %}
+      </ul>
+
+      <ul class="navbar-nav mb-2 mb-lg-0 justify-content-end">
+        <li class="nav-item">
+          <a class="nav-link" href="{{ site.discord_url }}">
+            <span class="bi bi-discord"></span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ site.github_url }}">
+            <span class="bi bi-github"></span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
