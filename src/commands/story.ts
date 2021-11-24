@@ -11,6 +11,7 @@ import { getDestination, hashCode } from "../util/common";
 import ComponentWildcard from "../util/ComponentWildcard";
 
 import stories from '../manifest';
+import Manifest from "../util/manifest";
 
 // import StoryService from "../services/story";
 
@@ -18,6 +19,7 @@ const REGEX = /[^A-Za-z0-9]+/g;
 
 export default class StoryCommand extends SlashCommand {
   wildcards: ComponentWildcard;
+  manifest: Manifest;
   // private service: StoryService;
 
   constructor(creator: SlashCreator) {
@@ -38,7 +40,7 @@ export default class StoryCommand extends SlashCommand {
       ]
     })
     this.wildcards = new ComponentWildcard(this.creator);
-
+    this.manifest = new Manifest();
     // this.service = new StoryService("./stories");
   }
 
@@ -47,21 +49,18 @@ export default class StoryCommand extends SlashCommand {
     // const stories = await this.service.getStoryList();
     const option = ctx.options[ctx.focused];
 
-    return stories.filter((story) => {
+    return this.manifest.get().filter((story) => {
       // search by title and by author
-      return story.title.toLowerCase().includes(option.toLowerCase())
-    }).map((story) => {
-      return {
-        name: story.title + ' (' + story.author + ')',
-        value: story.ref
-      }
-    });
+      return story.title.toLowerCase().includes(option.toLowerCase()) || story.author.toLowerCase().includes(option.toLowerCase());
+    }).map(({ title, author, ref }) => 
+      ({ name: title + ' (' + author + ')', value: ref })
+    );
   }
 
   async run(ctx: CommandContext) {
     await ctx.defer(true);
     // load story from file system
-    const story = yaml.load((await readFile(`./stories/${ctx.options.ref}.yaml`)).toString()) as Story;
+    const story = yaml.load((await readFile(`./${ctx.options.ref}.yaml`)).toString()) as Story;
 
     return await this.storyProgress(story, story.start_with, ctx);
   }
@@ -76,7 +75,7 @@ export default class StoryCommand extends SlashCommand {
     const method = ctx.initiallyResponded ? 'send' : 'editOriginal';
     const msg = await ctx[method](payload);
     const id = msg instanceof Message ? msg.id : ctx.interactionID;
-    console.log(stepID, 'Is interaction the source?', (msg as Message).id, ctx.interactionID);
+    // console.log(stepID, 'Is interaction the source?', (msg as Message).id, ctx.interactionID);
 
     if (typeof step.routing === 'string') {
       if (step.routing === 'end') {
