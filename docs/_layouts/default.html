@@ -11,7 +11,16 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.1/font/bootstrap-icons.css">
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/styles/night-owl.min.css">
 
+    <!-- Metadata -->
     <title>{% if page.title %}{{ page.title }} -{% endif %} {{ site.title }}</title>
+
+    <meta name="description" content="{{ site.description }}">
+
+    <meta property="og:title" content="{% if page.title %}{{ page.title }} -{% endif %} {{ site.title }}">
+    <meta property="og:description" content="{{ site.description }}">
+    <meta property="og:url" content="{{ page.url | absolute_url }}">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="{{ site.baseurl }}/assets/images/avatar.png">
   </head>
   <body>
     {% include nav.html %}
