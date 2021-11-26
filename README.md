@@ -3,6 +3,8 @@ A discord interactions service that provides a platform for interactive stories 
 
 ## Writing your own story
 
+> This README section is outdated, please check the [guide](https://tinkerstorm.github.io/story-engine/guides/write-a-story) for updated information. *It may be removed / merged in future in favour of the guide itself.*
+
 Stories are written in [YAML](https://yaml.org/), a *relatively* simple structure notation.
 
 This is likely to change in the future when support is added for more complex story components, but for now, the following is a good place to start.
