@@ -62,6 +62,7 @@ export default class StoryCommand extends SlashCommand {
     await ctx.defer(true);
     // load story from file system
     const story = yaml.load((await readFile(`./stories/${ctx.options.ref}.yaml`)).toString()) as Story;
+    story.path = ctx.options.ref; // TODO: remove this, only used for debugging as an override
 
     return await this.storyProgress(story, story.start_with, ctx);
   }
@@ -74,7 +75,23 @@ export default class StoryCommand extends SlashCommand {
     const payload = this.resolvePayload(step.payload, story, stepID);
 
     const method = ctx.initiallyResponded ? 'send' : 'editOriginal';
-    const msg = await ctx[method](payload);
+    const msg = await ctx[method]({
+      content: "",
+      embeds: [],
+      components: [],
+      ...payload,
+      ...(story.steps[stepID].routing === 'end' && {
+        components: [{
+          type: ComponentType.ACTION_ROW,
+          components: [{
+            type: ComponentType.BUTTON,
+            custom_id: 'credits',
+            label: 'Credits',
+            style: ButtonStyle.SUCCESS
+          }]
+        }]
+      })
+    });
     const id = msg instanceof Message ? msg.id : ctx.interactionID;
     console.log(stepID, 'Is interaction the source?', (msg as Message).id, ctx.interactionID);
 
@@ -87,21 +104,6 @@ export default class StoryCommand extends SlashCommand {
           `${story.title} (${story.author}) on step '${stepID}'.`
         );
 
-        ctx.editOriginal({
-          content: '',
-          embeds: [],
-          ...payload,
-          components: [{
-            type: ComponentType.ACTION_ROW,
-            components: [{
-              type: ComponentType.BUTTON,
-              custom_id: 'credits',
-              label: 'Credits',
-              style: ButtonStyle.SUCCESS
-            }]
-          }]
-        });
-
         ctx.registerComponentFrom(id, "credits", (ctx) => {
           ctx.unregisterComponent("credits", id);
           ctx.editOriginal({
@@ -113,7 +115,7 @@ export default class StoryCommand extends SlashCommand {
                 type: ComponentType.BUTTON,
                 style: ButtonStyle.LINK,
                 label: 'Source',
-                url: 'https://github.com/TinkerStorm/story-engine/blob/main/stories/underground-kingdom-1.yaml',
+                url: `https://github.com/TinkerStorm/story-engine/blob/main/stories/${story.path}.yaml`,
               }]
             }]
           });
@@ -153,7 +155,10 @@ export default class StoryCommand extends SlashCommand {
           },
           description: payload,
           // @ts-ignore
-          color: "RANDOM"
+          color: "RANDOM",
+          footer: {
+            text: story.path
+          }
         }]
       }
     }

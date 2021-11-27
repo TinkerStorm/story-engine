@@ -6,6 +6,7 @@ export interface Story {
   description: string;
   steps: { [step: string]: StoryStep };
   start_with: string;
+  path: string;
 }
 
 export interface StoryStep {
