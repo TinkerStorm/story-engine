@@ -74,8 +74,8 @@ export default class StoryCommand extends SlashCommand {
 
     const payload = this.resolvePayload(step.payload, story, stepID);
 
-    const method = ctx.initiallyResponded ? 'send' : 'editOriginal';
-    const msg = await ctx[method]({
+    // const method = ctx.initiallyResponded ? 'send' : 'editOriginal';
+    const msg = await ctx.editOriginal({
       content: "",
       embeds: [],
       components: [],
@@ -92,8 +92,8 @@ export default class StoryCommand extends SlashCommand {
         }]
       })
     });
-    const id = msg instanceof Message ? msg.id : ctx.interactionID;
-    console.log(stepID, 'Is interaction the source?', (msg as Message).id, ctx.interactionID);
+
+    const { id } = msg;
 
     if (typeof step.routing === 'string') {
       if (step.routing === 'end') {
