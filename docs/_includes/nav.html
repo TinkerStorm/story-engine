@@ -9,14 +9,10 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         {% for item in site.data.nav %}
-          <li class="nav-item" {% if item.children %}{% endif %}>
-            {% if item.href %}
-              <a href="{{ item.href | absolute_url }}" class="nav-link{% if item.href == page.url %} active{% endif %}">
-                {{ item.label }}
-              </a>
-            {% else %}
+          <li class="nav-item">
+            <a href="{{ item.href | relative_url }}" class="nav-link{% if item.href == page.url %} active{% endif %}">
               {{ item.label }}
-            {% endif %}
+            </a>
           </li>
         {% endfor %}
       </ul>
