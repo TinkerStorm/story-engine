@@ -3,7 +3,12 @@ description: A discord interactions service that provides a platform for interac
 
 discord_url: https://discord.gg/Bb3JQQG
 
+collections_dir: ./collections
+
 collections:
+  goals:
+    output: false
+    sort: priority
   guides:
     output:
       permalink: /:title/
