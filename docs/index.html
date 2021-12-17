@@ -11,6 +11,11 @@ actions:
     text: Write a story
     icon: pen
 
+  - type: success
+    href: ./roadmap
+    text: Check the roadmap
+    icon: signpost-split
+
   - type: danger
     href: https://github.com/RocketDragon/story-bucket-template
     text: Host a bucket
@@ -24,7 +29,7 @@ actions:
     <p class="lead mb-4">{{ site.description }}</p>
     <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
       {% for action in page.actions %}
-        <a href="{{ action.href | absolute_url }}" class="btn btn-{{ action.type }} btn-lg gap-3">
+        <a href="{{ action.href | relative_url }}" class="btn btn-{{ action.type }} btn-lg gap-3">
           <span class="bi bi-{{ action.icon }}"></span>
           <span class="p-1">{{ action.text }}</span>
         </a>
