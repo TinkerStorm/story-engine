@@ -4,6 +4,10 @@ description: A discord interactions service that provides a platform for interac
 discord_url: https://discord.gg/Bb3JQQG
 
 collections:
+  goals:
+    layout: goal
+    output:
+      permalink: /roadmap/:title/
   guides:
     output:
       permalink: /guides/:title/

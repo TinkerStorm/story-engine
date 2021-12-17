@@ -1,0 +1,41 @@
+---
+layout: default
+---
+
+<!-- Back to the roadmap -->
+<a href="{{ '/roadmap' | relative_url }}">Back to the roadmap</a>
+
+<div class="container">
+  <div class="p-md-4 row">
+    <div class="card">
+      {% if page.image %}
+      <img src="{{ page.image | relative_url }}" class="card-img-top p-4" alt="{{ page.title }}">
+      {% endif %}
+      <h3 class="card-header">{{ page.title }}</h3>
+
+      <div class="card-body">
+        {{ page.description | markdownify }}
+      </div>
+
+      <div class="alert alert-warning" role="alert">
+        This does not reflect the current state of the project, please refer to <a
+          href="{{ site.github.repository_url }}">GitHub</a> (for current state) or <a
+          href="{{ site.discord_url }}">Discord</a> (for discussion and updates).
+      </div>
+
+      {% if page.links %}
+      <ul class="list-group list-group-flush">
+        {% for link in page.links %}
+        <li class="list-group-item">
+          <a href="{{ link.href }}">{{ link.label }}</a>
+        </li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+    </div>
+  </div>
+
+  <div>
+    {{ content | markdownify }}
+  </div>
+</div>

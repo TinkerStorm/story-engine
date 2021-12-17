@@ -1,65 +1,41 @@
 ---
 layout: default
-goals:
-  - title: Ways to start a story
-    description: |
-      - 💻 `Run /story begin` - Begin the story by command
-      - ⚽ `Click 'Start Story'` - Begin the story by component
-      - 💾 `Run /story resume` - Resume the last story run, if any
-  - title: Reverse Event Flow
-    description: |
-      The intention is to flip the method flow on its head - to prioritize listening for the components themselves as one listener and then use that to unify slash command and component listeners.
-  - title: State Management
-    description: |
-      Managing state between steps in the current way still requires a syntax of sorts, but it acts as an object reference in memory.
-      Conceptually making it, is the easy part - making it work, and demonstrating it - there's the challenge.
-      
-      <details>
-        <summary>Session Persisence</summary>
-        A database would be required if stories end up getting the 'save' ability.
-      </details>
-  - title: Modal Interactions
-    description: |
-      Modal's are still under development, but they may allow for a more diverse interaction flow - as well as more variability.
-  - title: Bucket Support (Open Source)
-    description: |
-      Focusing on getting the bucket core functional with integration as a git submodule.
-    links:
-      - label: GitHub Template
-        href: https://github.com/RocketDragon/story-bucket-template
-  - title: Story Writer
-    image: https://cdn.discordapp.com/attachments/911943261919277068/919659532899201044/story-writer-idea.png
-    description: |
-      An interface editor for writing stories for the service.
-      This would have the intention of including support for all existing features of the service.
-    links:
-      - label: Skyra Components
-        href: https://github.com/skyra-project/discord-components
 ---
 
-<div class="d-flex justify-content-center">
-  <h1>Roadmap</h1>
-</div>
+<div class="container">
+  <div class="d-flex justify-content-center">
+    <p class="h1">Roadmap</h1>
+  </div>
 
-<div class="d-md-flex flex-wrap justify-content-center">
-{% for goal in page.goals %}
-  <div class="card m-2" style="max-width: 18rem;">
-    <div class="card-body">
-      {% if goal.image %}
-        <img src="{{ goal.image }}" class="card-img-top" width="300px" alt="{{ goal.title }}">
-      {% endif %}
-      <h5 class="card-title">{{ goal.title }}</h5>
-      <p class="card-text">{{ goal.description | markdownify }}</p>
-      {% if goal.links %}
-        <ul class="list-group list-group-flush">
-          {% for link in goal.links %}
-            <li class="list-group-item">
-              <a href="{{ link.href }}">{{ link.label }}</a>
-            </li>
-          {% endfor %}
-        </ul>
-      {% endif %}
+  <div class="d-flex justify-content-center">
+    <div class="alert alert-warning" role="alert">
+      This does not reflect the current state of the project, please refer to <a href="{{ site.github.repository_url }}">GitHub</a> (for current state) or <a href="{{ site.discord_url }}">Discord</a> (for discussion and updates).
     </div>
   </div>
-{% endfor %}
+
+  <div class="d-flex flex-wrap justify-content-center">
+  {% for goal in site.goals %}
+    <div class="card m-2" style="min-width: 10rem; max-width: 20rem;">
+      <div class="card-body">
+        {% if goal.image %}
+          <img src="{{ goal.image }}" class="card-img-top" width="300px" alt="{{ goal.title }}">
+        {% endif %}
+        <h5 class="card-title"><a href="{{ goal.url | relative_url }}">{{ goal.title }}</a></h5>
+        <p class="card-text">{{ goal.description | markdownify }}</p>
+        {% if goal.links %}
+          <ul class="list-group list-group-flush">
+            {% for link in goal.links %}
+              <li class="list-group-item">
+                <a href="{{ link.href }}">{{ link.label }}</a>
+              </li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+        <div class="progress">
+          <div class="progress-bar" role="progressbar" style="width: {{ goal.progress | default: 0 }}%" aria-valuenow="{{ goal.progress }}" aria-valuemin="0" aria-valuemax="100"></div>
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+  </div>
 </div>
