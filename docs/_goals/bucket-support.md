@@ -10,6 +10,8 @@ links:
     href: https://github.com/TinkerStorm/story-bucket
   - label: Scoop Buckets
     href: https://github.com/ScoopInstaller/Scoop/wiki/Buckets
+  - label: "Issue #1"
+    href: https://github.com/TinkerStorm/story-engine/issues/1
 ---
 
 - How can communities be supported to host their own bucket / service?
