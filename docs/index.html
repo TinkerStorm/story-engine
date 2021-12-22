@@ -27,7 +27,7 @@ actions:
   <h1 class="display-5 fw-bold">{{ site.title }}</h1>
   <div class="col-lg-12 mx-auto">
     <p class="lead mb-4">{{ site.description }}</p>
-    <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+    <div class="d-grid gap-2 d-lg-flex justify-content-sm-center">
       {% for action in page.actions %}
         <a href="{{ action.href | relative_url }}" class="btn btn-{{ action.type }} btn-lg gap-3">
           <span class="bi bi-{{ action.icon }}"></span>
