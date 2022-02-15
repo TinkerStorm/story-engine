@@ -143,6 +143,7 @@ routing = "end"
 payload = "This is the **right** branch of the story."
 {% endhighlight %}
 </div>
+</div>
 
 Use of a data schema would be a good way to ensure that the each story is valid and consistent, and that the data is in the right format.
 
